@@ -15,5 +15,6 @@ namespace MusicApp.Data.DatabaseContext
         }
 
         public DbSet<GenreModel> Genres { get; set; }
+
     }
 }

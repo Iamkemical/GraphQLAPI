@@ -13,6 +13,6 @@ namespace MusicApp.Domain.Models
         [Required]
         public string Title { get; set; }
 
-        public DateTime? DateCreated { get; set; }
+        public DateTime DateCreated { get; set; }
     }
 }
