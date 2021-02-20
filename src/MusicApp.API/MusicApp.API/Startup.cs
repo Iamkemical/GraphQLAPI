@@ -1,17 +1,12 @@
-using GraphQL.Server.Ui.Voyager;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MusicApp.Data.DatabaseContext;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace MusicApp.API
 {
@@ -19,21 +14,8 @@ namespace MusicApp.API
     {
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        private readonly IConfiguration Configuration;
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddPooledDbContextFactory<ApplicationDbContext>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-            });
-
-            services
-                .AddGraphQL()
-                .AddQueryType<Query>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,13 +30,10 @@ namespace MusicApp.API
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGraphQL();
-            });
-
-            app.UseGraphQLVoyager(new GraphQLVoyagerOptions()
-            {
-                GraphQLEndPoint = "/graphql",
-                Path = "/graphql-voyager"
+                endpoints.MapGet("/", async context =>
+                {
+                    await context.Response.WriteAsync("Hello World!");
+                });
             });
         }
     }
