@@ -14,6 +14,7 @@ namespace MusicApp.API.GraphQL
         [UseDbContext(typeof(ApplicationDbContext))]
         [UseFiltering]
         [UseSorting]
+        [UseProjection]
         public IQueryable<Genre> GetGenres([ScopedService] ApplicationDbContext dbContext)
         {
             return dbContext.Genres;
@@ -22,6 +23,7 @@ namespace MusicApp.API.GraphQL
         [UseDbContext(typeof(ApplicationDbContext))]
         [UseFiltering]
         [UseSorting]
+        [UseProjection]
         public IQueryable<SubGenre> GetSubGenres([ScopedService] ApplicationDbContext dbContext)
         {
             return dbContext.SubGenres;

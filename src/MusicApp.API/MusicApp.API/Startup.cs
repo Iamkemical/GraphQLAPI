@@ -39,7 +39,8 @@ namespace MusicApp.API
                 .AddQueryType<GraphQLQuery>()
                 .AddMutationType<GenreMutation>()
                 .AddFiltering()
-                .AddSorting();
+                .AddSorting()
+                .AddProjections();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
