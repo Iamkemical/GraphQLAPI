@@ -27,5 +27,20 @@ namespace MusicApp.API.GraphQL.Mutation
 
             return new CreateGenrePayload(genre);
         }
+
+        [UseDbContext(typeof(ApplicationDbContext))]
+        public async Task<UpdateGenrePayload> UpdateGenreAsync(UpdateGenreInput input, 
+            [ScopedService] ApplicationDbContext dbContext)
+        {
+            var genreFromDb = dbContext.Genres.FirstOrDefault(g => g.Id == input.Id);
+
+            genreFromDb.Title = input.Title;
+            genreFromDb.DateCreated = input.DateCreated;
+
+            dbContext.Genres.Update(genreFromDb);
+            await dbContext.SaveChangesAsync();
+
+            return new UpdateGenrePayload(genreFromDb);
+        }
     }
 }
