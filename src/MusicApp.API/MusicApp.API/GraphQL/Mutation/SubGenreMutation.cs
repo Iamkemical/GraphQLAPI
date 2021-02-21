@@ -1,11 +1,14 @@
 ﻿using HotChocolate;
 using HotChocolate.Data;
+using HotChocolate.Subscriptions;
 using MusicApp.API.Data;
 using MusicApp.API.GraphQL.SubGenres;
+using MusicApp.API.GraphQL.Subscription;
 using MusicApp.API.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MusicApp.API.GraphQL.Mutation
@@ -15,7 +18,9 @@ namespace MusicApp.API.GraphQL.Mutation
         [UseDbContext(typeof(ApplicationDbContext))]
         [GraphQLDescription("This represents the action for creating subgenre")]
         public async Task<CreateSubGenrePayload> CreateSubGenreAsync(CreateSubGenreInput input,
-            [ScopedService] ApplicationDbContext dbContext)
+            [ScopedService] ApplicationDbContext dbContext,
+            [Service] ITopicEventSender eventSender,
+            CancellationToken cancellationToken)
         {
             var subGenre = new SubGenre
             {
@@ -25,7 +30,10 @@ namespace MusicApp.API.GraphQL.Mutation
             };
 
             dbContext.SubGenres.Add(subGenre);
-            await dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync(cancellationToken);
+
+            await eventSender.SendAsync(nameof(SubGenreSubscription.OnSubGenreCreate),
+                subGenre, cancellationToken);
 
             return new CreateSubGenrePayload(subGenre);
         }

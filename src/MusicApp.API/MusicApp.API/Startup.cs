@@ -40,9 +40,10 @@ namespace MusicApp.API
             services
                 .AddGraphQLServer()
                 .AddQueryType<GraphQLQuery>()
-                .AddMutationType<GenreMutation>()
-                //.AddMutationType<SubGenreMutation>()
-                .AddSubscriptionType<GenreSubscription>()
+                //.AddMutationType<GenreMutation>()
+                .AddMutationType<SubGenreMutation>()
+                //.AddSubscriptionType<GenreSubscription>()
+                .AddSubscriptionType<SubGenreSubscription>()
                 .AddFiltering()
                 .AddSorting()
                 .AddType<GenreType>()
