@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MusicApp.API.GraphQL.Subscription
 {
-    [GraphQLDescription("This represents the subscription for the genre resource")]
+    [GraphQLDescription("This represents the subscription for the subgenre resource")]
     public class SubGenreSubscription
     {
        [Subscribe]
