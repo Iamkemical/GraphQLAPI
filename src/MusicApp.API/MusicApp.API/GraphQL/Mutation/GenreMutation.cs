@@ -59,12 +59,17 @@ namespace MusicApp.API.GraphQL.Mutation
         [UseDbContext(typeof(ApplicationDbContext))]
         [GraphQLDescription("This represents the action for deleting genres")]
         public async Task<DeleteGenrePayload> DeleteGenreAsync(DeleteGenreInput input, 
-            [ScopedService] ApplicationDbContext dbContext)
+            [ScopedService] ApplicationDbContext dbContext,
+            [Service] ITopicEventSender eventSender,
+            CancellationToken cancellationToken)
         {
             var genreFromDb = dbContext.Genres.FirstOrDefault(g => g.Id == input.Id);
 
             dbContext.Genres.Remove(genreFromDb);
-            await dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync(cancellationToken);
+
+            await eventSender.SendAsync(nameof(GenreSubscription.OnGenreDelete),
+                "Genre successfully deleted!", cancellationToken);
 
             return new DeleteGenrePayload("Genre successfully deleted!");
         }
