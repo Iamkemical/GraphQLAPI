@@ -31,5 +31,15 @@ namespace MusicApp.API.GraphQL
         {
             return dbContext.SubGenres;
         }
+
+        [UseDbContext(typeof(ApplicationDbContext))]
+        [UseFiltering]
+        [UseSorting]
+        [UseProjection]
+        [GraphQLDescription("This represents the action for querying music")]
+        public IQueryable<Music> GetMusics([ScopedService] ApplicationDbContext dbContext)
+        {
+            return dbContext.Musics;
+        }
     }
 }
