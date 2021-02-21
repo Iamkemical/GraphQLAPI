@@ -13,6 +13,7 @@ namespace MusicApp.API.GraphQL.Mutation
     public class GenreMutation
     {
         [UseDbContext(typeof(ApplicationDbContext))]
+        [GraphQLDescription("This represents the action for creating genres")]
         public async Task<CreateGenrePayload> CreateGenreAsync(CreateGenreInput input,
             [ScopedService] ApplicationDbContext dbContext)
         {
@@ -29,6 +30,7 @@ namespace MusicApp.API.GraphQL.Mutation
         }
 
         [UseDbContext(typeof(ApplicationDbContext))]
+        [GraphQLDescription("This represents the action for updating genres")]
         public async Task<UpdateGenrePayload> UpdateGenreAsync(UpdateGenreInput input, 
             [ScopedService] ApplicationDbContext dbContext)
         {
@@ -44,6 +46,7 @@ namespace MusicApp.API.GraphQL.Mutation
         }
 
         [UseDbContext(typeof(ApplicationDbContext))]
+        [GraphQLDescription("This represents the action for deleting genres")]
         public async Task<DeleteGenrePayload> DeleteGenreAsync(DeleteGenreInput input, 
             [ScopedService] ApplicationDbContext dbContext)
         {
