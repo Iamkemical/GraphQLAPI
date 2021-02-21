@@ -17,6 +17,8 @@ namespace MusicApp.API.Models
 
         public DateTime DateCreated { get; set; }
 
+        public byte[] Picture { get; set; }
+
         public enum AudienceType { U, PG, TWELVEA, FIFTEEN, EIGHTEEN }
 
         public AudienceType Audience { get; set; }
