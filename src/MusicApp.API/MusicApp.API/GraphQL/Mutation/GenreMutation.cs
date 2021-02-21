@@ -1,11 +1,14 @@
 ﻿using HotChocolate;
 using HotChocolate.Data;
+using HotChocolate.Subscriptions;
 using MusicApp.API.Data;
 using MusicApp.API.GraphQL.Genres;
+using MusicApp.API.GraphQL.Subscription;
 using MusicApp.API.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MusicApp.API.GraphQL.Mutation
@@ -15,7 +18,9 @@ namespace MusicApp.API.GraphQL.Mutation
         [UseDbContext(typeof(ApplicationDbContext))]
         [GraphQLDescription("This represents the action for creating genres")]
         public async Task<CreateGenrePayload> CreateGenreAsync(CreateGenreInput input,
-            [ScopedService] ApplicationDbContext dbContext)
+            [ScopedService] ApplicationDbContext dbContext,
+            [Service] ITopicEventSender eventSender,
+            CancellationToken cancellationToken)
         {
             var genre = new Genre
             {
@@ -24,7 +29,9 @@ namespace MusicApp.API.GraphQL.Mutation
             };
 
             dbContext.Genres.Add(genre);
-            await dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync(cancellationToken);
+
+            await eventSender.SendAsync(nameof(GenreSubscription.OnGenreAdded), genre, cancellationToken);
 
             return new CreateGenrePayload(genre);
         }
