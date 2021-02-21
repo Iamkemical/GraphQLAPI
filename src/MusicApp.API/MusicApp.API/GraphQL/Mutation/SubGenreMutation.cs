@@ -62,12 +62,17 @@ namespace MusicApp.API.GraphQL.Mutation
         [UseDbContext(typeof(ApplicationDbContext))]
         [GraphQLDescription("This represents the action for deleting subgenre")]
         public async Task<DeleteSubGenrePayload> DeleteSubGenreAsync(DeleteSubGenreInput input,
-            [ScopedService] ApplicationDbContext dbContext)
+            [ScopedService] ApplicationDbContext dbContext,
+            [Service] ITopicEventSender eventSender,    
+            CancellationToken cancellationToken)
         {
             var subGenreFromDb = dbContext.SubGenres.FirstOrDefault(s => s.Id == input.Id);
 
             dbContext.SubGenres.Remove(subGenreFromDb);
-            await dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync(cancellationToken);
+
+            await eventSender.SendAsync(nameof(SubGenreSubscription.OnSubGenreDelete),
+                "Subgenre successfully deleted", cancellationToken);
 
             return new DeleteSubGenrePayload("SubGenre successfully deleted!");
         }

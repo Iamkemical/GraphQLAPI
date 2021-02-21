@@ -23,5 +23,12 @@ namespace MusicApp.API.GraphQL.Subscription
         {
             return subGenre;
         }
+
+        [Subscribe]
+        [Topic]
+        public string OnSubGenreDelete([EventMessage] string message)
+        {
+            return message;
+        }
     }
 }
