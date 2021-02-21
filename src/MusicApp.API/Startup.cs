@@ -8,7 +8,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MusicApp.API.Data;
 using MusicApp.API.GraphQL;
+using MusicApp.API.GraphQL.Genres;
 using MusicApp.API.GraphQL.Mutation;
+using MusicApp.API.GraphQL.SubGenres;
+using MusicApp.API.GraphQL.Subscription;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,10 +40,16 @@ namespace MusicApp.API
             services
                 .AddGraphQLServer()
                 .AddQueryType<GraphQLQuery>()
+                //.AddMutationType<GenreMutation>()
                 .AddMutationType<SubGenreMutation>()
+                //.AddSubscriptionType<GenreSubscription>()
+                .AddSubscriptionType<SubGenreSubscription>()
                 .AddFiltering()
                 .AddSorting()
-                .AddProjections();
+                .AddType<GenreType>()
+                .AddType<SubGenreType>()
+                .AddProjections()
+                .AddInMemorySubscriptions();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +59,8 @@ namespace MusicApp.API
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseWebSockets();
 
             app.UseRouting();
 
