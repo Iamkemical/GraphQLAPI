@@ -1,4 +1,5 @@
 ﻿using HotChocolate;
+using HotChocolate.Data;
 using MusicApp.API.Data;
 using MusicApp.API.GraphQL.Genres;
 using MusicApp.API.Models;
@@ -11,6 +12,7 @@ namespace MusicApp.API.GraphQL.Mutation
 {
     public class GenreMutation
     {
+        [UseDbContext(typeof(ApplicationDbContext))]
         public async Task<CreateGenrePayload> CreateGenreAsync(CreateGenreInput input,
             [ScopedService] ApplicationDbContext dbContext)
         {
