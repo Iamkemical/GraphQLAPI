@@ -1,4 +1,5 @@
 ﻿using HotChocolate;
+using HotChocolate.Data;
 using MusicApp.API.Data;
 using MusicApp.API.Models;
 using System;
@@ -10,7 +11,10 @@ namespace MusicApp.API.GraphQL
 {
     public class GraphQLQuery
     {
-        public IQueryable<Genre> GetGenres([Service] ApplicationDbContext dbContext)
+        [UseDbContext(typeof(ApplicationDbContext))]
+        [UseFiltering]
+        [UseSorting]
+        public IQueryable<Genre> GetGenres([ScopedService] ApplicationDbContext dbContext)
         {
             return dbContext.Genres;
         }

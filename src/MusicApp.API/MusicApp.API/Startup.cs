@@ -28,14 +28,16 @@ namespace MusicApp.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddPooledDbContextFactory<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
             services
                 .AddGraphQLServer()
-                .AddQueryType<GraphQLQuery>();
+                .AddQueryType<GraphQLQuery>()
+                .AddFiltering()
+                .AddSorting();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
