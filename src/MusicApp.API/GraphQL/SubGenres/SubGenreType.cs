@@ -13,6 +13,8 @@ namespace MusicApp.API.GraphQL.SubGenres
     {
         protected override void Configure(IObjectTypeDescriptor<SubGenre> descriptor)
         {
+            descriptor.Description("This represents all the music subgenre");
+
             descriptor.Field(s => s.Id)
                 .Description("This represents the id of the subgenre");
 
