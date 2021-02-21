@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace MusicApp.API.GraphQL
 {
+    [GraphQLDescription("This represents the query for the genre and subgenre")]
     public class GraphQLQuery
     {
         [UseDbContext(typeof(ApplicationDbContext))]
