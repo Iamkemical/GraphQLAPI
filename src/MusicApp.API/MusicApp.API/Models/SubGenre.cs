@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace MusicApp.API.Models
 {
-    public class Genre
+    public class SubGenre
     {
         [Key]
         public int Id { get; set; }
@@ -16,6 +17,10 @@ namespace MusicApp.API.Models
 
         public DateTime DateCreated { get; set; }
 
-        public ICollection<SubGenre> SubGenres { get; set; } = new List<SubGenre>();
+        [Required]
+        public int GenreId { get; set; }
+
+        [ForeignKey("GenreId")]
+        public virtual Genre Genre { get; set; }
     }
 }

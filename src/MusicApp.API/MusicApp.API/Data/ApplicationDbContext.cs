@@ -16,5 +16,6 @@ namespace MusicApp.API.Data
         }
 
         public DbSet<Genre> Genres { get; set; }
+        public DbSet<SubGenre> SubGenres { get; set; }
     }
 }
