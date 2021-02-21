@@ -31,7 +31,7 @@ namespace MusicApp.API.GraphQL.Mutation
             dbContext.Genres.Add(genre);
             await dbContext.SaveChangesAsync(cancellationToken);
 
-            await eventSender.SendAsync(nameof(GenreSubscription.OnGenreAdded), genre, cancellationToken);
+            await eventSender.SendAsync(nameof(GenreSubscription.OnGenreCreate), genre, cancellationToken);
 
             return new CreateGenrePayload(genre);
         }
@@ -39,7 +39,9 @@ namespace MusicApp.API.GraphQL.Mutation
         [UseDbContext(typeof(ApplicationDbContext))]
         [GraphQLDescription("This represents the action for updating genres")]
         public async Task<UpdateGenrePayload> UpdateGenreAsync(UpdateGenreInput input, 
-            [ScopedService] ApplicationDbContext dbContext)
+            [ScopedService] ApplicationDbContext dbContext,
+            [Service] ITopicEventSender eventSender,
+            CancellationToken cancellationToken)
         {
             var genreFromDb = dbContext.Genres.FirstOrDefault(g => g.Id == input.Id);
 
@@ -47,7 +49,9 @@ namespace MusicApp.API.GraphQL.Mutation
             genreFromDb.DateCreated = input.DateCreated;
 
             dbContext.Genres.Update(genreFromDb);
-            await dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync(cancellationToken);
+
+            await eventSender.SendAsync(nameof(GenreSubscription.OnGenreUpdate), genreFromDb, cancellationToken);
 
             return new UpdateGenrePayload(genreFromDb);
         }

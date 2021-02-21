@@ -12,7 +12,14 @@ namespace MusicApp.API.GraphQL.Subscription
     {
         [Subscribe]
         [Topic]
-        public Genre OnGenreAdded([EventMessage] Genre genre)
+        public Genre OnGenreCreate([EventMessage] Genre genre)
+        {
+            return genre;
+        }
+
+        [Subscribe]
+        [Topic]
+        public Genre OnGenreUpdate([EventMessage] Genre genre)
         {
             return genre;
         }
