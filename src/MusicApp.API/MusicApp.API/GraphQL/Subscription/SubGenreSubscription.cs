@@ -10,9 +10,16 @@ namespace MusicApp.API.GraphQL.Subscription
 {
     public class SubGenreSubscription
     {
+       [Subscribe]
+       [Topic]
+       public SubGenre OnSubGenreCreate([EventMessage] SubGenre subGenre)
+       {
+            return subGenre;
+       }
+
         [Subscribe]
         [Topic]
-       public SubGenre OnSubGenreCreate([EventMessage] SubGenre subGenre)
+        public SubGenre OnSubGenreUpdate([EventMessage] SubGenre subGenre)
         {
             return subGenre;
         }

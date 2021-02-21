@@ -41,7 +41,9 @@ namespace MusicApp.API.GraphQL.Mutation
         [UseDbContext(typeof(ApplicationDbContext))]
         [GraphQLDescription("This represents the action for updating subgenre")]
         public async Task<UpdateSubGenrePayload> UpdateSubGenreAsync(UpdateSubGenreInput input, 
-            [ScopedService] ApplicationDbContext dbContext)
+            [ScopedService] ApplicationDbContext dbContext,
+            [Service] ITopicEventSender eventSender,
+            CancellationToken cancellationToken)
         {
             var subGenreFromDb = dbContext.SubGenres.FirstOrDefault(s => s.Id == input.Id);
 
@@ -49,7 +51,10 @@ namespace MusicApp.API.GraphQL.Mutation
             subGenreFromDb.DateCreated = input.DateCreated;
 
             dbContext.SubGenres.Update(subGenreFromDb);
-            await dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync(cancellationToken);
+
+            await eventSender.SendAsync(nameof(SubGenreSubscription.OnSubGenreUpdate),
+                subGenreFromDb, cancellationToken);
 
             return new UpdateSubGenrePayload(subGenreFromDb);
         }
