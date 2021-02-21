@@ -8,7 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MusicApp.API.Data;
 using MusicApp.API.GraphQL;
+using MusicApp.API.GraphQL.Genres;
 using MusicApp.API.GraphQL.Mutation;
+using MusicApp.API.GraphQL.SubGenres;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +42,8 @@ namespace MusicApp.API
                 .AddMutationType<SubGenreMutation>()
                 .AddFiltering()
                 .AddSorting()
+                .AddType<GenreType>()
+                .AddType<SubGenreType>()
                 .AddProjections();
         }
 
