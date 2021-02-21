@@ -50,5 +50,17 @@ namespace MusicApp.API.GraphQL.Mutation
 
             return new UpdateMusicPayload(musicFromDb);
         }
+
+        [UseDbContext(typeof(ApplicationDbContext))]
+        public async Task<DeleteMusicPayload> DeleteMusicAsync(DeleteMusicInput input,
+            [ScopedService] ApplicationDbContext dbContext)
+        {
+            var musicFromDb = dbContext.Musics.FirstOrDefault(m => m.Id == input.Id);
+
+            dbContext.Musics.Remove(musicFromDb);
+            await dbContext.SaveChangesAsync();
+
+            return new DeleteMusicPayload("Music successfully deleted!");
+        }
     }
 }
