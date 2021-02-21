@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 
 namespace MusicApp.API.GraphQL.Subscription
 {
+    [GraphQLDescription("This for updating all part of the genre resource")]
     public class GenreSubscription
     {
         [Subscribe]
         [Topic]
+        [GraphQLDescription("Subscription for real-time update on the create genre mutation action")]
         public Genre OnGenreCreate([EventMessage] Genre genre)
         {
             return genre;
@@ -19,6 +21,7 @@ namespace MusicApp.API.GraphQL.Subscription
 
         [Subscribe]
         [Topic]
+        [GraphQLDescription("Subscription for real-time update on the update genre mutation action")]
         public Genre OnGenreUpdate([EventMessage] Genre genre)
         {
             return genre;
@@ -26,6 +29,7 @@ namespace MusicApp.API.GraphQL.Subscription
 
         [Subscribe]
         [Topic]
+        [GraphQLDescription("Subscription for real-time update on the delete genre mutation action")]
         public string OnGenreDelete([EventMessage] string message)
         {
             return message;
