@@ -28,5 +28,32 @@ namespace MusicApp.API.GraphQL.Mutation
 
             return new CreateSubGenrePayload(subGenre);
         }
+
+        [UseDbContext(typeof(ApplicationDbContext))]
+        public async Task<UpdateSubGenrePayload> UpdateSubGenreAsync(UpdateSubGenreInput input, 
+            [ScopedService] ApplicationDbContext dbContext)
+        {
+            var subGenreFromDb = dbContext.SubGenres.FirstOrDefault(s => s.Id == input.Id);
+
+            subGenreFromDb.Title = input.Title;
+            subGenreFromDb.DateCreated = input.DateCreated;
+
+            dbContext.SubGenres.Update(subGenreFromDb);
+            await dbContext.SaveChangesAsync();
+
+            return new UpdateSubGenrePayload(subGenreFromDb);
+        }
+
+        [UseDbContext(typeof(ApplicationDbContext))]
+        public async Task<DeleteSubGenrePayload> DeleteSubGenreAsync(DeleteSubGenreInput input,
+            [ScopedService] ApplicationDbContext dbContext)
+        {
+            var subGenreFromDb = dbContext.SubGenres.FirstOrDefault(s => s.Id == input.Id);
+
+            dbContext.SubGenres.Remove(subGenreFromDb);
+            await dbContext.SaveChangesAsync();
+
+            return new DeleteSubGenrePayload("SubGenre successfully deleted!");
+        }
     }
 }
