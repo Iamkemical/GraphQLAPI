@@ -16,6 +16,7 @@ namespace MusicApp.API.GraphQL.Mutation
     public class MusicMutation
     {
         [UseDbContext(typeof(ApplicationDbContext))]
+        [GraphQLDescription("This represents the action for creating music")]
         public async Task<CreateMusicPayload> CreateMusicAsync(CreateMusicInput input,
             [ScopedService] ApplicationDbContext dbContext,
             [Service] ITopicEventSender eventSender,
@@ -42,6 +43,7 @@ namespace MusicApp.API.GraphQL.Mutation
         }
 
         [UseDbContext(typeof(ApplicationDbContext))]
+        [GraphQLDescription("This represents the action for updating music")]
         public async Task<UpdateMusicPayload> UpdateMusicAsync(UpdateMusicInput input,
             [ScopedService] ApplicationDbContext dbContext,
             [Service] ITopicEventSender eventSender,
@@ -65,6 +67,7 @@ namespace MusicApp.API.GraphQL.Mutation
         }
 
         [UseDbContext(typeof(ApplicationDbContext))]
+        [GraphQLDescription("This represents the action for deleting music")]
         public async Task<DeleteMusicPayload> DeleteMusicAsync(DeleteMusicInput input,
             [ScopedService] ApplicationDbContext dbContext,
             [Service] ITopicEventSender eventSender,
