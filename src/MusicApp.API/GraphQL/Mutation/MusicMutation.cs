@@ -1,11 +1,14 @@
 ﻿using HotChocolate;
 using HotChocolate.Data;
+using HotChocolate.Subscriptions;
 using MusicApp.API.Data;
 using MusicApp.API.GraphQL.Musics;
+using MusicApp.API.GraphQL.Subscription;
 using MusicApp.API.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MusicApp.API.GraphQL.Mutation
@@ -14,7 +17,9 @@ namespace MusicApp.API.GraphQL.Mutation
     {
         [UseDbContext(typeof(ApplicationDbContext))]
         public async Task<CreateMusicPayload> CreateMusicAsync(CreateMusicInput input,
-            [ScopedService] ApplicationDbContext dbContext)
+            [ScopedService] ApplicationDbContext dbContext,
+            [Service] ITopicEventSender eventSender,
+            CancellationToken cancellationToken)
         {
             var music = new Music
             {
@@ -28,7 +33,10 @@ namespace MusicApp.API.GraphQL.Mutation
             };
 
             dbContext.Musics.Add(music);
-            await dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync(cancellationToken);
+
+            await eventSender.SendAsync(nameof(MusicSubscription.OnMusicCreate),
+                music, cancellationToken);
 
             return new CreateMusicPayload(music);
         }

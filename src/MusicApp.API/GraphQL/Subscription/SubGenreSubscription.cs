@@ -15,9 +15,9 @@ namespace MusicApp.API.GraphQL.Subscription
        [Topic]
        [GraphQLDescription("Subscription for real-time update on the create subgenre mutation action")]
         public SubGenre OnSubGenreCreate([EventMessage] SubGenre subGenre)
-       {
+        {
             return subGenre;
-       }
+        }
 
         [Subscribe]
         [Topic]
