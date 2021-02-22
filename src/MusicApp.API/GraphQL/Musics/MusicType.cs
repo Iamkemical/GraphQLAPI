@@ -30,19 +30,22 @@ namespace MusicApp.API.GraphQL.Musics
             descriptor.Field(m => m.Audience)
                 .Description("This represents the different audience categories");
 
+            descriptor.Field(m => m.Picture)
+                .Description("This represents the picture on the music");
+
             descriptor.Field(m => m.GenreId)
                 .Description("This is the foreign key for the genre table");
 
             descriptor.Field(m => m.SubGenreId)
                 .Description("This is the foreign key for the subgenre table");
 
-            descriptor.Field(m => m.GenreId)
-                .ResolveWith<Resolvers>(m => m.GetGenre)
+            descriptor.Field(m => m.Genre)
+                .ResolveWith<Resolvers>(m => m.GetGenre(default!, default!))
                 .UseDbContext<ApplicationDbContext>()
                 .Description("This represents the genre in the music");
 
-            descriptor.Field(m => m.SubGenreId)
-                .ResolveWith<Resolvers>()
+            descriptor.Field(m => m.SubGenre)
+                .ResolveWith<Resolvers>(m => m.GetSubGenre(default!, default!))
                 .UseDbContext<ApplicationDbContext>()
                 .Description("This represents the subgenre in music");
         }

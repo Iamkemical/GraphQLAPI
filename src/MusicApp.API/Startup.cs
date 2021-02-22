@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using MusicApp.API.Data;
 using MusicApp.API.GraphQL;
 using MusicApp.API.GraphQL.Genres;
+using MusicApp.API.GraphQL.Musics;
 using MusicApp.API.GraphQL.Mutation;
 using MusicApp.API.GraphQL.SubGenres;
 using MusicApp.API.GraphQL.Subscription;
@@ -49,6 +50,7 @@ namespace MusicApp.API
                 .AddSorting()
                 .AddType<GenreType>()
                 .AddType<SubGenreType>()
+                .AddType<MusicType>()
                 .AddProjections()
                 .AddInMemorySubscriptions();
         }
