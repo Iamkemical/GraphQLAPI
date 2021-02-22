@@ -66,12 +66,17 @@ namespace MusicApp.API.GraphQL.Mutation
 
         [UseDbContext(typeof(ApplicationDbContext))]
         public async Task<DeleteMusicPayload> DeleteMusicAsync(DeleteMusicInput input,
-            [ScopedService] ApplicationDbContext dbContext)
+            [ScopedService] ApplicationDbContext dbContext,
+            [Service] ITopicEventSender eventSender,
+            CancellationToken cancellationToken)
         {
             var musicFromDb = dbContext.Musics.FirstOrDefault(m => m.Id == input.Id);
 
             dbContext.Musics.Remove(musicFromDb);
-            await dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync(cancellationToken);
+
+            await eventSender.SendAsync(nameof(MusicSubscription.OnMusicDelete),
+                "Music successfully deleted!", cancellationToken);
 
             return new DeleteMusicPayload("Music successfully deleted!");
         }
