@@ -16,5 +16,12 @@ namespace MusicApp.API.GraphQL.Subscription
         {
             return music;
         }
+
+        [Subscribe]
+        [Topic]
+        public Music OnMusicUpdate([EventMessage] Music music)
+        {
+            return music;
+        }
     }
 }

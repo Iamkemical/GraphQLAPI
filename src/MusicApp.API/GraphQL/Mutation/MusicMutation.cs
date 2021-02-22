@@ -43,7 +43,9 @@ namespace MusicApp.API.GraphQL.Mutation
 
         [UseDbContext(typeof(ApplicationDbContext))]
         public async Task<UpdateMusicPayload> UpdateMusicAsync(UpdateMusicInput input,
-            [ScopedService] ApplicationDbContext dbContext)
+            [ScopedService] ApplicationDbContext dbContext,
+            [Service] ITopicEventSender eventSender,
+            CancellationToken cancellationToken)
         {
             var musicFromDb = dbContext.Musics.FirstOrDefault(m => m.Id == input.Id);
 
@@ -54,7 +56,10 @@ namespace MusicApp.API.GraphQL.Mutation
             musicFromDb.Picture = input.Picture;
 
             dbContext.Musics.Update(musicFromDb);
-            await dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync(cancellationToken);
+
+            await eventSender.SendAsync(nameof(MusicSubscription.OnMusicUpdate),
+                musicFromDb, cancellationToken);
 
             return new UpdateMusicPayload(musicFromDb);
         }
