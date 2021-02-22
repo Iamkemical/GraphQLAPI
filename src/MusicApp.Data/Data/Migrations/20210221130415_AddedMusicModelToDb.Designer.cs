@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MusicApp.API.Data;
 
 namespace MusicApp.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210221130415_AddedMusicModelToDb")]
+    partial class AddedMusicModelToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,6 +40,44 @@ namespace MusicApp.API.Migrations
                     b.ToTable("Genres");
                 });
 
+            modelBuilder.Entity("MusicApp.API.Models.Music", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Audience")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("GenreId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("Picture")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubGenreId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GenreId");
+
+                    b.HasIndex("SubGenreId");
+
+                    b.ToTable("Musics");
+                });
+
             modelBuilder.Entity("MusicApp.API.Models.SubGenre", b =>
                 {
                     b.Property<int>("Id")
@@ -60,6 +100,25 @@ namespace MusicApp.API.Migrations
                     b.HasIndex("GenreId");
 
                     b.ToTable("SubGenres");
+                });
+
+            modelBuilder.Entity("MusicApp.API.Models.Music", b =>
+                {
+                    b.HasOne("MusicApp.API.Models.Genre", "Genre")
+                        .WithMany()
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MusicApp.API.Models.SubGenre", "SubGenre")
+                        .WithMany()
+                        .HasForeignKey("SubGenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Genre");
+
+                    b.Navigation("SubGenre");
                 });
 
             modelBuilder.Entity("MusicApp.API.Models.SubGenre", b =>
