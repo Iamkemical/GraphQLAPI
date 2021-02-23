@@ -1,6 +1,7 @@
 ﻿using HotChocolate;
 using HotChocolate.Data;
 using HotChocolate.Subscriptions;
+using HotChocolate.Types;
 using MusicApp.API.Data;
 using MusicApp.API.GraphQL.Genres;
 using MusicApp.API.GraphQL.Subscription;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace MusicApp.API.GraphQL.Mutation
 {
+    [ExtendObjectType(Name = "Mutation")]
     public class GenreMutation
     {
         [UseDbContext(typeof(ApplicationDbContext))]
