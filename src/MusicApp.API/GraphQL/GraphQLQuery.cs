@@ -2,6 +2,7 @@
 using HotChocolate.Data;
 using MusicApp.API.Data;
 using MusicApp.API.Models;
+using MusicApp.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,15 @@ namespace MusicApp.API.GraphQL
         public IQueryable<Music> GetMusics([ScopedService] ApplicationDbContext dbContext)
         {
             return dbContext.Musics;
+        }
+
+        [UseDbContext(typeof(ApplicationDbContext))]
+        [UseFiltering]
+        [UseSorting]
+        [UseProjection]
+        public IQueryable<Artist> GetArtists([ScopedService] ApplicationDbContext dbContext)
+        {
+            return dbContext.Artists;
         }
     }
 }
