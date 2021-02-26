@@ -45,6 +45,7 @@ namespace MusicApp.API
                     .AddTypeExtension<GenreMutation>()
                     .AddTypeExtension<SubGenreMutation>()
                     .AddTypeExtension<MusicMutation>()
+                    .AddTypeExtension<ArtistMutation>()
                 .AddSubscriptionType(d => d.Name("Subscription"))
                     .AddTypeExtension<GenreSubscription>()
                     .AddTypeExtension<SubGenreSubscription>()
