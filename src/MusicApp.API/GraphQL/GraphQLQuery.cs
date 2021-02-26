@@ -47,6 +47,7 @@ namespace MusicApp.API.GraphQL
         [UseFiltering]
         [UseSorting]
         [UseProjection]
+        [GraphQLDescription("This represents the action for querying the the artist")]
         public IQueryable<Artist> GetArtists([ScopedService] ApplicationDbContext dbContext)
         {
             return dbContext.Artists;
