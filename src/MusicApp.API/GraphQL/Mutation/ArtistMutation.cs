@@ -30,5 +30,19 @@ namespace MusicApp.API.GraphQL.Mutation
 
             return new CreateArtistPayload(artist);
         }
+
+        [UseDbContext(typeof(ApplicationDbContext))]
+        public async Task<UpdateArtistPayload> UpdateArtistAsync(UpdateArtistInput input,
+            [ScopedService] ApplicationDbContext dbContext)
+        {
+            var artistFromDb = dbContext.Artists.FirstOrDefault(a => a.Id == input.Id);
+
+            artistFromDb.Name = input.Name;
+
+            dbContext.Artists.Update(artistFromDb);
+            await dbContext.SaveChangesAsync();
+
+            return new UpdateArtistPayload(artistFromDb);
+        }
     }
 }
