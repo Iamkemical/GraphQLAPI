@@ -30,7 +30,7 @@ namespace MusicApp.API.GraphQL.Subscription
 
         [Subscribe]
         [Topic]
-        [GraphQLDescription("Subscription for real-time update on the delete genre mutation action")]
+        [GraphQLDescription("Subscription for real-time update on the delete subgenre mutation action")]
         public string OnSubGenreDelete([EventMessage] string message)
         {
             return message;
