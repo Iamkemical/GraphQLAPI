@@ -41,28 +41,38 @@ namespace MusicApp.API.GraphQL.Mutation
 
         [UseDbContext(typeof(ApplicationDbContext))]
         public async Task<UpdateArtistPayload> UpdateArtistAsync(UpdateArtistInput input,
-            [ScopedService] ApplicationDbContext dbContext)
+            [ScopedService] ApplicationDbContext dbContext,
+            [Service] ITopicEventSender eventSender,
+            CancellationToken cancellationToken)
         {
             var artistFromDb = dbContext.Artists.FirstOrDefault(a => a.Id == input.Id);
 
             artistFromDb.Name = input.Name;
 
             dbContext.Artists.Update(artistFromDb);
-            await dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync(cancellationToken);
+
+            await eventSender.SendAsync(nameof(ArtistSubscription.OnArtistUpdate),
+                artistFromDb, cancellationToken);
 
             return new UpdateArtistPayload(artistFromDb);
         }
 
         [UseDbContext(typeof(ApplicationDbContext))]
         public async Task<DeleteArtistPayload> DeleteArtistAsync(DeleteArtistInput input,
-            [ScopedService] ApplicationDbContext dbContext)
+            [ScopedService] ApplicationDbContext dbContext,
+            [Service] ITopicEventSender eventSender,
+            CancellationToken cancellationToken)
         {
             var artistFromDb = dbContext.Artists.FirstOrDefault(a => a.Id == input.Id);
 
             dbContext.Artists.Remove(artistFromDb);
-            await dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync(cancellationToken);
 
-            return new DeleteArtistPayload("Artist successfully deleted");
+            await eventSender.SendAsync(nameof(ArtistSubscription.OnArtistDelete),
+                "Artist successfully deleted!", cancellationToken);
+
+            return new DeleteArtistPayload("Artist successfully deleted!");
         }
     }
 }

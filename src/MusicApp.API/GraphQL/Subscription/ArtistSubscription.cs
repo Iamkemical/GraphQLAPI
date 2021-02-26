@@ -17,5 +17,19 @@ namespace MusicApp.API.GraphQL.Subscription
         {
             return artist;
         }
+
+        [Subscribe]
+        [Topic]
+        public Artist OnArtistUpdate([EventMessage] Artist artist)
+        {
+            return artist;
+        }
+
+        [Subscribe]
+        [Topic]
+        public string OnArtistDelete([EventMessage] string message)
+        {
+            return message;
+        }
     }
 }
