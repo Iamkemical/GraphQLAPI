@@ -50,6 +50,7 @@ namespace MusicApp.API
                     .AddTypeExtension<GenreSubscription>()
                     .AddTypeExtension<SubGenreSubscription>()
                     .AddTypeExtension<MusicSubscription>()
+                    .AddTypeExtension<ArtistSubscription>()
                 .AddFiltering()
                 .AddSorting()
                 .AddType<GenreType>()
