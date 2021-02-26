@@ -44,5 +44,17 @@ namespace MusicApp.API.GraphQL.Mutation
 
             return new UpdateArtistPayload(artistFromDb);
         }
+
+        [UseDbContext(typeof(ApplicationDbContext))]
+        public async Task<DeleteArtistPayload> DeleteArtistAsync(DeleteArtistInput input,
+            [ScopedService] ApplicationDbContext dbContext)
+        {
+            var artistFromDb = dbContext.Artists.FirstOrDefault(a => a.Id == input.Id);
+
+            dbContext.Artists.Remove(artistFromDb);
+            await dbContext.SaveChangesAsync();
+
+            return new DeleteArtistPayload("Artist successfully deleted");
+        }
     }
 }
